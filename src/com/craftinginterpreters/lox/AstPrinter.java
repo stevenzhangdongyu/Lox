@@ -1,9 +1,17 @@
 package com.craftinginterpreters.lox;
 
 class AstPrinter implements Expr.Visitor<String> {
+    Environment environment = new Environment();
     String print(Expr expr) {
         return expr.accept(this);
     }
+
+    @Override
+    public String visitAssignExpr(Expr.Assign expr) {
+        environment.assign(expr.name,expr.value);
+        return expr.value.toString();
+    }
+
     @Override
     public String visitBinaryExpr(Expr.Binary expr) {
         return parenthesize(expr.operator.lexeme,
@@ -22,8 +30,18 @@ class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
+    public String visitLogicalExpr(Expr.Logical expr) {
+        return null;
+    }
+
+    @Override
     public String visitUnaryExpr(Expr.Unary expr) {
         return parenthesize(expr.operator.lexeme, expr.right);
+    }
+
+    @Override
+    public String visitVariableExpr(Expr.Variable expr) {
+        return (String) environment.get(expr.name);
     }
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
