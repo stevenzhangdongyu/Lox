@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="853c2d90-542c-4ceb-9ba1-59398a2d9334" name="Changes" comment="完成了变量的声明，解析，控制流，增加了for，while，if语句">
-      <change afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/LoxCallable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/LoxFunction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Return.java" afterDir="false" />
+    <list default="true" id="853c2d90-542c-4ceb-9ba1-59398a2d9334" name="Changes" comment="完成了function以及function的闭包">
+      <change afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Resolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code.txt" beforeDir="false" afterPath="$PROJECT_DIR$/code.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/AstPrinter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Expr.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Expr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Environment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Environment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Stmt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Stmt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/tool/GenerateAst.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/tool/GenerateAst.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Lox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/craftinginterpreters/lox/Lox.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,19 +38,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "E:/JavaProjects/CQU/timetable",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/JavaProjects/CQU/timetable&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.Lox">
     <configuration name="AstPrinter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.craftinginterpreters.lox.AstPrinter" />
@@ -123,6 +118,8 @@
       <workItem from="1702236669230" duration="3886000" />
       <workItem from="1702269993968" duration="14865000" />
       <workItem from="1702352901559" duration="16057000" />
+      <workItem from="1702566677727" duration="4519000" />
+      <workItem from="1702644610381" duration="5566000" />
     </task>
     <task id="LOCAL-00001" summary="完成了scanning，以及parsing，以及interpret the tree，虽然只是一个expression的tree">
       <created>1702236739541</created>
@@ -138,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702358728685</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="完成了function以及function的闭包">
+      <created>1702566972893</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1702566972893</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +153,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -158,6 +174,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="完成了scanning，以及parsing，以及interpret the tree，虽然只是一个expression的tree" />
     <MESSAGE value="完成了变量的声明，解析，控制流，增加了for，while，if语句" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成了变量的声明，解析，控制流，增加了for，while，if语句" />
+    <MESSAGE value="完成了function以及function的闭包" />
+    <option name="LAST_COMMIT_MESSAGE" value="完成了function以及function的闭包" />
   </component>
 </project>
