@@ -1,10 +1,12 @@
-var a = "global";
-{
-  fun showA() {
-    print a;
-  }
+class A{
+    V() {
+        print "V";
+    }
+    init(){
+        this.V = 1;
+        print "hello A";
+    }
 
-  showA();
-  var a = "block";
-  showA();
 }
+var s = A();
+s.V();
